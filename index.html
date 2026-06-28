@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CM SMM PANEL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /*--- Global Reset & Mobile App View ---*/
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+            -webkit-tap-highlight-color: transparent; 
+        }
+        *::-webkit-scrollbar {
+            display: none; 
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+        }
+
+        /*--- Shimmer Animation Effect ---*/
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, #d4af37, #fff, #aa7c11, #fff, #d4af37);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+
+        /*--- Premium Gold Button Style ---*/
+        .gold-btn {
+            background: linear-gradient(135deg, #b38728, #fbf5b7, #daa520, #aa7c11);
+            background-size: 400% 400%;
+            color: #000;
+            border: none;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(218, 165, 32, 0.2);
+        }
+        .gold-btn:active {
+            transform: scale(0.98);
+            background-position: 100% 0;
+        }
+
+        /*--- Full Screen Mobile Container ---*/
+        .panel-container {
+            width: 100vw;
+            height: 100vh;
+            background: #121212;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /*--- Optimized Custom Coin Structure for Mobile ---*/
+        .coins-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #1a1a1a;
+            border: 1px solid #c5a059; 
+            padding: 4px 10px 4px 4px; 
+            border-radius: 50px;       
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 100; /* Panel heading ke upar rakhne ke liye */
+            display: none; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        
+        .custom-coin-icon {
+            width: 22px; /* Size chota kiya gaya hai */
+            height: 22px;
+            background: linear-gradient(135deg, #dfba6b, #b38e45);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            color: #000000; 
+            font-size: 13px;
+            font-family: 'Georgia', serif;
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.4);
+        }
+
+        .coin-amount {
+            font-size: 14px; /* Text size chota kiya gaya hai */
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        /*--- Full Screen Login Layout ---*/
+        #login-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            gap: 25px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .login-header h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d4af37;
+            font-size: 18px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 16px 15px 16px 50px;
+            background: #1a1a1a;
+            border: 1px solid #443410;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 8px rgba(214, 175, 54, 0.2);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            padding: 0 10px;
+        }
+
+        /*--- Full Screen Main Panel Setup ---*/
+        #main-panel {
+            display: none; 
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+        
+        .panel-header {
+            text-align: left; /* Mobile layout me left align behter lagta hai */
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 15px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            padding-right: 95px; /* Coin badge ke liye space chhoda hai */
+        }
+        .panel-header h1 {
+            font-size: 22px; /* Text overlap na ho isliye heading thodi choti ki hai */
+            font-weight: 800;
+        }
+        .panel-header p {
+            font-size: 13px;
+            color: #888;
+            margin-top: 5px;
+        }
+        .panel-header p span {
+            color: #d4af37;
+            font-weight: 600;
+        }
+
+        /*--- Premium URL Input Field ---*/
+        .url-section {
+            margin-bottom: 15px;
+        }
+        .url-group {
+            position: relative;
+        }
+        .url-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d4af37;
+            font-size: 16px;
+        }
+        .url-group input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            background: #161616;
+            border: 1px solid #332500;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+        .url-group input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(214, 175, 54, 0.15);
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #d4af37;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        /* Internal Scrollable Content */
+        .scrollable-services {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 2px;
+        }
+
+        /*--- Accordion / Service Items ---*/
+        .services-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .service-item {
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            background: #161616;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .service-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: linear-gradient(90deg, #161616, #1f1f1f);
+            user-select: none;
+        }
+        .service-title-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .service-title-left i {
+            color: #d4af37;
+            font-size: 18px;
+        }
+        .service-header .arrow {
+            transition: transform 0.3s ease;
+            color: #888;
+        }
+        .service-item.active .arrow {
+            transform: rotate(180deg);
+            color: #d4af37;
+        }
+        .service-item.active {
+            border-color: #d4af37;
+        }
+
+        /* Dropdown Price Rows */
+        .service-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #0d0d0d;
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-top: 1px solid #1a1a1a;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .price-row .coins {
+            color: #d4af37;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        /* Premium Logout Button Section */
+        .logout-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .logout-btn {
+            background: transparent;
+            color: #ff4d4d;
+            border: 1px solid #ff4d4d;
+            padding: 8px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s ease;
+        }
+        .logout-btn:active {
+            background: rgba(255, 77, 77, 0.15);
+            transform: scale(0.95);
+        }
+
+        /*--- Fixed Bottom Premium Confirm Button ---*/
+        .confirm-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 18px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /*--- CUSTOM PREMIUM AUTO-HIDE POPUP ---*/
+        .premium-popup {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            border: 1px solid #c5a059;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(197, 160, 89, 0.2);
+            padding: 16px 24px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 9999;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 90%;
+            max-width: 380px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .premium-popup.show {
+            top: 30px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .popup-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #dfba6b, #b38e45);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-size: 18px;
+        }
+        .popup-content h4 {
+            color: #d4af37;
+            font-size: 16px;
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        .popup-content p {
+            color: #cccccc;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="panel-container">
+    
+    <div class="coins-badge" id="user-coins">
+        <div class="custom-coin-icon">C</div>
+        <span class="coin-amount" id="coin-txt">0</span>
+    </div>
+
+    <div class="premium-popup" id="order-popup">
+        <div class="popup-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="popup-content">
+            <h4>Order Placed Successfully!</h4>
+            <p>Your order will be fulfilled within 48 hours.</p>
+        </div>
+    </div>
+
+    <div id="login-screen">
+        <div class="login-header">
+            <h2 class="shimmer-text">CHIEF USER LOGIN</h2>
+            <p style="color: #666; font-size: 14px;">Enter your App Name/Username to login</p>
+        </div>
+        <div class="error-msg" id="login-error">Error!</div>
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="username-input" placeholder="Enter Name / Username" autocomplete="on">
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Password">
+        </div>
+        <button class="gold-btn login-btn" id="login-btn-txt" onclick="handleLogin()">Secure Login</button>
+    </div>
+
+    <div id="main-panel">
+        <div>
+            <div class="panel-header">
+                <h1 class="shimmer-text">CM SMM PANEL</h1>
+                <p>Welcome: <span id="user-display-name">...</span> <i class="fas fa-user-shield" style="font-size:12px;"></i></p>
+            </div>
+            
+            <div class="url-section">
+                <div class="section-title">Enter Your Instagram URL</div>
+                <div class="url-group">
+                    <i class="fab fa-instagram"></i>
+                    <input type="url" id="insta-url" placeholder="https://www.instagram.com/username/..." autocomplete="off">
+                </div>
+            </div>
+
+            <div class="section-title">Order Service</div>
+        </div>
+
+        <div class="scrollable-services">
+            <div class="services-container">
+                
+                <div class="service-item">
+                    <div class="service-header" onclick="toggleAccordion(this)">
+                        <div class="service-title-left">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram Follower</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    <div class="service-content">
+                        <div class="price-row" onclick="selectService(this, 1000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 1000</span>
+                            <span>100 follower</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 10000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 10000</span>
+                            <span>1K follower</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 100000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 100000</span>
+                            <span>10k follower</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 1000000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 1000000</span>
+                            <span>100k follower</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 10000000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 10000000</span>
+                            <span>1M follower</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-header" onclick="toggleAccordion(this)">
+                        <div class="service-title-left">
+                            <i class="fas fa-heart" style="color: #ff2a5f;"></i>
+                            <span>Instagram Like</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    <div class="service-content">
+                        <div class="price-row" onclick="selectService(this, 1000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 1000</span>
+                            <span>100 Like</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 10000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 10000</span>
+                            <span>1K Like</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 100000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 100000</span>
+                            <span>10k Like</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 1000000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 1000000</span>
+                            <span>100k Like</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 10000000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 10000000</span>
+                            <span>1M Like</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-header" onclick="toggleAccordion(this)">
+                        <div class="service-title-left">
+                            <i class="fas fa-comment"></i>
+                            <span>Instagram Comment</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    <div class="service-content">
+                        <div class="price-row" onclick="selectService(this, 1000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 1000</span>
+                            <span>100 Comment</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 10000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 10000</span>
+                            <span>1K Comment</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 100000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 100000</span>
+                            <span>10k Comment</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 1000000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 1000000</span>
+                            <span>100k Comment</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 10000000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 10000000</span>
+                            <span>1M Comment</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-header" onclick="toggleAccordion(this)">
+                        <div class="service-title-left">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Instagram VIEW</span>
+                        </div>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    <div class="service-content">
+                        <div class="price-row" onclick="selectService(this, 1000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 1000</span>
+                            <span>10k VIEW</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 10000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 10000</span>
+                            <span>100k VIEW</span>
+                        </div>
+                        <div class="price-row" onclick="selectService(this, 100000)">
+                            <span class="coins"><i class="fas fa-copyright"></i> 100000</span>
+                            <span>1M VIEW</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="logout-container">
+                    <button class="logout-btn" onclick="handleLogOut()">
+                        <i class="fas fa-sign-out-alt"></i> Log Out
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <button class="gold-btn confirm-btn" onclick="confirmOrder()">Confirm Order</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, onValue, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
+        authDomain: "chief-login12.firebaseapp.com",
+        databaseURL: "https://chief-login12-default-rtdb.firebaseio.com",
+        projectId: "chief-login12",
+        storageBucket: "chief-login12.firebasestorage.app",
+        messagingSenderId: "334157325641",
+        appId: "1:334157325641:web:c9b2d4048105e71011e698",
+        measurementId: "G-CB9F743N3M"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    let loggedInUsername = ""; 
+    let userCurrentCoins = 0;
+    let selectedPrice = 0;
+    let selectedServiceText = "";
+    let coinListenerUnsubscribe = null;
+
+    // AUTO LOGIN CHECK: सेशन मैनेजमेंट
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const savedName = localStorage.getItem("cm_saved_username");
+            if (savedName) {
+                loggedInUsername = savedName;
+            } else {
+                loggedInUsername = user.email.split('@')[0];
+                localStorage.setItem("cm_saved_username", loggedInUsername);
+            }
+            showMainPanel();
+        } else {
+            showLoginScreen();
+        }
+    });
+
+    function showMainPanel() {
+        document.getElementById('user-display-name').innerText = loggedInUsername.toUpperCase();
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-panel').style.display = 'flex'; 
+        document.getElementById('user-coins').style.display = 'flex'; 
+
+        // लाइव कॉइन्स लोड करना शुरू करें
+        if(coinListenerUnsubscribe) coinListenerUnsubscribe();
+        const coinRef = ref(database, 'users/' + loggedInUsername + '/coins');
+        coinListenerUnsubscribe = onValue(coinRef, (snapshot) => {
+            const data = snapshot.val();
+            userCurrentCoins = data ? parseInt(data) : 0;
+            document.getElementById('coin-txt').innerText = userCurrentCoins.toLocaleString();
+        });
+    }
+
+    function showLoginScreen() {
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('main-panel').style.display = 'none'; 
+        document.getElementById('user-coins').style.display = 'none';
+        document.getElementById('login-btn-txt').innerText = "Secure Login";
+        if(coinListenerUnsubscribe) {
+            coinListenerUnsubscribe();
+            coinListenerUnsubscribe = null;
+        }
+    }
+
+    // Secure Login Handler
+    window.handleLogin = function() {
+        const userInput = document.getElementById('username-input').value.trim();
+        const passInp = document.getElementById('password').value.trim();
+        const errorMsg = document.getElementById('login-error');
+        const loginBtn = document.getElementById('login-btn-txt');
+
+        if (!userInput || !passInp) {
+            errorMsg.innerText = "Please fill all fields!";
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        loginBtn.innerText = "Verifying...";
+        errorMsg.style.display = 'none';
+
+        let fullEmail = userInput;
+        if (!userInput.includes('@')) {
+            fullEmail = userInput + "@chiefwatch.com";
+        }
+
+        loggedInUsername = userInput.split('@')[0];
+        localStorage.setItem("cm_saved_username", loggedInUsername);
+
+        signInWithEmailAndPassword(auth, fullEmail, passInp)
+            .then(() => {
+                // onAuthStateChanged handle karega screen switch
+            })
+            .catch((error) => {
+                loginBtn.innerText = "Secure Login";
+                errorMsg.innerText = "Error: Invalid username or password!";
+                errorMsg.style.display = 'block';
+                localStorage.removeItem("cm_saved_username");
+            });
+    }
+
+    // Log Out Handler
+    window.handleLogOut = function() {
+        if(confirm("Are you sure you want to log out?")) {
+            localStorage.removeItem("cm_saved_username");
+            signOut(auth).then(() => {
+                showLoginScreen();
+            }).catch((err) => {
+                alert("Logout Failed: " + err.message);
+            });
+        }
+    }
+
+    // Selection Logic
+    window.selectService = function(element, price) {
+        document.querySelectorAll('.price-row').forEach(row => {
+            row.style.background = 'transparent';
+            row.style.borderLeft = 'none';
+        });
+        element.style.background = 'rgba(214, 175, 54, 0.15)';
+        element.style.borderLeft = '4px solid #d4af37';
+        
+        selectedPrice = price;
+        selectedServiceText = element.querySelector('span:not(.coins)').innerText;
+    }
+
+    // Confirm Order
+    window.confirmOrder = function() {
+        const urlInput = document.getElementById('insta-url').value.trim();
+        
+        if(!urlInput) {
+            alert('Please enter your Instagram URL first!');
+            return;
+        }
+        if(!selectedServiceText || selectedPrice === 0) {
+            alert('Please select a service package from the list!');
+            return;
+        }
+        
+        if(userCurrentCoins < selectedPrice) {
+            alert('Insufficient Coins!\nYou need ' + selectedPrice + ' coins but you only have ' + userCurrentCoins + '.');
+            return;
+        }
+
+        const newCoinsAmount = userCurrentCoins - selectedPrice;
+        const currentDateTime = new Date();
+        const orderDate = currentDateTime.toLocaleDateString('en-GB'); 
+        const orderTime = currentDateTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        const orderDetails = {
+            username: loggedInUsername,
+            instagram_url: urlInput,
+            package: selectedServiceText,
+            coins_deducted: selectedPrice,
+            date: orderDate,
+            time: orderTime,
+            timestamp: Date.now()
+        };
+
+        const ordersRef = ref(database, 'orders');
+        const newOrderPushRef = push(ordersRef);
+        
+        set(newOrderPushRef, orderDetails)
+            .then(() => {
+                return set(ref(database, 'users/' + loggedInUsername + '/coins'), newCoinsAmount);
+            })
+            .then(() => {
+                const popup = document.getElementById('order-popup');
+                popup.classList.add('show');
+                document.getElementById('insta-url').value = "";
+                
+                setTimeout(() => {
+                    popup.classList.remove('show');
+                }, 2000);
+            })
+            .catch((err) => {
+                alert('Order Error: ' + err.message);
+            });
+    }
+
+    // Accordion Control
+    window.toggleAccordion = function(element) {
+        const item = element.parentElement;
+        const content = item.querySelector('.service-content');
+        
+        document.querySelectorAll('.service-item').forEach(el => {
+            if (el !== item && el.classList.contains('active')) {
+                el.classList.remove('active');
+                el.querySelector('.service-content').style.maxHeight = null;
+            }
+        });
+
+        if (item.classList.contains('active')) {
+            item.classList.remove('active');
+            content.style.maxHeight = null;
+        } else {
+            item.classList.add('active');
+            content.style.maxHeight = content.scrollHeight + "px"; 
+            
+            setTimeout(() => {
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 200);
+        }
+    }
+</script>
+
+</body>
+</html>
