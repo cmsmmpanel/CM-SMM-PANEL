@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CM SMM PANEL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // यहाँ अपनी असली EmailJS Public Key डालें
+            emailjs.init("Jh9Po3S3Lq0Bt7oou"); 
+        })();
+    </script>
+
     <style>
         /*--- Global Reset & Mobile App View ---*/
         * {
@@ -759,6 +768,10 @@
         const newOrderPushRef = push(ordersRef);
         
         set(newOrderPushRef, orderDetails)
+            .then(() => {
+                // EmailJS के ज़रिए ईमेल भेजने का कोड यहाँ सेट किया गया है
+                return emailjs.send("service_r1nva6e", "template_6gww5fp", orderDetails);
+            })
             .then(() => {
                 return set(ref(database, 'users/' + loggedInUsername + '/coins'), newCoinsAmount);
             })
