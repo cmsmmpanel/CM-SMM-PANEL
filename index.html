@@ -9,13 +9,12 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // यहाँ अपनी असली EmailJS Public Key डालें
             emailjs.init("Jh9Po3S3Lq0Bt7oou"); 
         })();
     </script>
 
     <style>
-        /*--- Global Reset & Mobile App View ---*/
+        /*--- Global Reset & Theme Setup ---*/
         * {
             margin: 0;
             padding: 0;
@@ -39,7 +38,6 @@
             overflow: hidden; 
         }
 
-        /*--- Shimmer Animation Effect ---*/
         @keyframes shimmer {
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
@@ -53,7 +51,6 @@
             animation: shimmer 4s linear infinite;
         }
 
-        /*--- Premium Gold Button Style ---*/
         .gold-btn {
             background: linear-gradient(135deg, #b38728, #fbf5b7, #daa520, #aa7c11);
             background-size: 400% 400%;
@@ -67,26 +64,111 @@
         }
         .gold-btn:active {
             transform: scale(0.98);
-            background-position: 100% 0;
         }
 
-        /*--- Full Screen Mobile Container ---*/
+        /*--- Sidebar Drawer Navigation ---*/
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: #111;
+            border-right: 1px solid #c5a059;
+            z-index: 2000;
+            transition: 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sidebar-menu.open {
+            left: 0;
+        }
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.6);
+            z-index: 1999;
+            display: none;
+        }
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 15px;
+        }
+        .sidebar-header h3 {
+            font-size: 18px;
+            color: #d4af37;
+        }
+        .close-sidebar {
+            color: #888;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .sidebar-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .nav-item {
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: #ccc;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
+        .nav-item:hover, .nav-item.active-nav {
+            background: rgba(214, 175, 54, 0.12);
+            color: #d4af37;
+            font-weight: 600;
+        }
+
+        /*--- Mobile View Structure ---*/
         .panel-container {
             width: 100vw;
             height: 100vh;
             background: #121212;
-            padding: 20px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
         }
 
-        /*--- Optimized Custom Coin Structure for Mobile ---*/
+        /*--- Top Fixed Nav Header ---*/
+        .top-nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #222;
+        }
+        .left-nav {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .menu-toggle-btn {
+            font-size: 20px;
+            color: #d4af37;
+            cursor: pointer;
+        }
+        .top-nav-bar h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
         .coins-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
             background: #1a1a1a;
             border: 1px solid #c5a059; 
             padding: 4px 10px 4px 4px; 
@@ -94,13 +176,10 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            z-index: 100; /* Panel heading ke upar rakhne ke liye */
-            display: none; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
-        
         .custom-coin-icon {
-            width: 22px; /* Size chota kiya gaya hai */
+            width: 22px;
             height: 22px;
             background: linear-gradient(135deg, #dfba6b, #b38e45);
             border-radius: 50%;
@@ -108,30 +187,86 @@
             justify-content: center;
             align-items: center;
             font-weight: 900;
-            color: #000000; 
+            color: #000; 
             font-size: 13px;
-            font-family: 'Georgia', serif;
-            box-shadow: inset 0 0 3px rgba(0,0,0,0.4);
         }
-
         .coin-amount {
-            font-size: 14px; /* Text size chota kiya gaya hai */
+            font-size: 14px;
             font-weight: bold;
             color: #ffffff;
-            letter-spacing: 0.5px;
         }
 
-        /*--- Full Screen Login Layout ---*/
+        /*--- Dashboard Fragments Switch Area ---*/
+        .fragment-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .app-fragment {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+        .app-fragment.active-fragment {
+            display: flex;
+        }
+
+        /*--- Wireframe Dashboard Top Display Card ---*/
+        .dashboard-status-card {
+            background: linear-gradient(145deg, #181818, #131313);
+            border: 1px solid #2a2415;
+            border-radius: 18px;
+            padding: 18px;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        .card-icon-area {
+            font-size: 24px;
+            color: #d4af37;
+            margin-bottom: 6px;
+        }
+        .deposit-pitch {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+        .mini-deposit-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 14px;
+        }
+        .status-row-title {
+            font-size: 12px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 5px;
+        }
+        .status-row-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        /*--- Login Layout Screen ---*/
         #login-screen {
             display: flex;
             flex-direction: column;
             justify-content: center;
             height: 100%;
-            gap: 20px; /* Gap thoda adjust kiya naye feature ke liye */
+            gap: 20px;
         }
         .login-header {
             text-align: center;
-            margin-bottom: 5px;
         }
         .login-header h2 {
             font-size: 26px;
@@ -157,11 +292,6 @@
             color: #fff;
             font-size: 16px;
             outline: none;
-            transition: 0.3s;
-        }
-        .input-group input:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 8px rgba(214, 175, 54, 0.2);
         }
         .login-btn {
             width: 100%;
@@ -175,17 +305,13 @@
             font-size: 14px;
             text-align: center;
             display: none;
-            padding: 0 10px;
         }
-
-        /*--- New Download App Box Style ---*/
         .app-download-container {
             border: 1px dashed rgba(212, 175, 55, 0.3);
             border-radius: 14px;
             padding: 15px;
             text-align: center;
             background: rgba(26, 26, 26, 0.6);
-            margin-top: 15px;
         }
         .app-download-container p {
             color: #aaa;
@@ -205,39 +331,9 @@
             font-weight: bold;
         }
 
-        /*--- Full Screen Main Panel Setup ---*/
-        #main-panel {
-            display: none; 
-            flex-direction: column;
-            height: 100%;
-            justify-content: space-between;
-        }
-        
-        .panel-header {
-            text-align: left; /* Mobile layout me left align behter lagta hai */
-            border-bottom: 1px solid #2a2a2a;
-            padding-bottom: 15px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            padding-right: 95px; /* Coin badge ke liye space chhoda hai */
-        }
-        .panel-header h1 {
-            font-size: 22px; /* Text overlap na ho isliye heading thodi choti ki hai */
-            font-weight: 800;
-        }
-        .panel-header p {
-            font-size: 13px;
-            color: #888;
-            margin-top: 5px;
-        }
-        .panel-header p span {
-            color: #d4af37;
-            font-weight: 600;
-        }
-
-        /*--- Premium URL Input Field ---*/
+        /*--- Input URL Field ---*/
         .url-section {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .url-group {
             position: relative;
@@ -248,75 +344,70 @@
             top: 50%;
             transform: translateY(-50%);
             color: #d4af37;
-            font-size: 16px;
         }
         .url-group input {
             width: 100%;
-            padding: 14px 15px 14px 45px;
+            padding: 12px 15px 12px 42px;
             background: #161616;
             border: 1px solid #332500;
             border-radius: 12px;
             color: #fff;
             font-size: 14px;
             outline: none;
-            transition: 0.3s;
-        }
-        .url-group input:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 10px rgba(214, 175, 54, 0.15);
         }
 
         .section-title {
-            font-size: 16px;
+            font-size: 14px;
             color: #d4af37;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        /* Internal Scrollable Content */
+        /* Scrollable Area Design */
         .scrollable-services {
             flex: 1;
             overflow-y: auto;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             padding-right: 2px;
         }
-
-        /*--- Accordion / Service Items ---*/
         .services-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         .service-item {
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            background: #161616;
+            border: 1px solid #2f2715;
+            border-radius: 30px; 
+            background: #151515;
             overflow: hidden;
             transition: 0.3s;
         }
         .service-header {
-            padding: 16px;
+            padding: 14px 22px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            background: linear-gradient(90deg, #161616, #1f1f1f);
             user-select: none;
         }
         .service-title-left {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 600;
-            font-size: 15px;
+            font-weight: 500;
+            font-size: 14px;
         }
         .service-title-left i {
             color: #d4af37;
-            font-size: 18px;
+            font-size: 16px;
         }
         .service-header .arrow {
             transition: transform 0.3s ease;
-            color: #888;
+            color: #777;
+            font-size: 14px;
         }
         .service-item.active .arrow {
             transform: rotate(180deg);
@@ -324,70 +415,165 @@
         }
         .service-item.active {
             border-color: #d4af37;
+            border-radius: 16px; 
         }
-
-        /* Dropdown Price Rows */
         .service-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-            background: #0d0d0d;
+            background: #0a0a0a;
         }
         .price-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 20px;
-            border-top: 1px solid #1a1a1a;
-            font-size: 14px;
+            padding: 12px 22px;
+            border-top: 1px solid #161616;
+            font-size: 13px;
             cursor: pointer;
         }
         .price-row .coins {
             color: #d4af37;
-            display: flex;
-            align-items: center;
-            gap: 6px;
             font-weight: 600;
         }
 
-        /* Premium Logout Button Section */
+        /* Generic Inner Fragment Layout Design */
+        .fragment-content-body {
+            background: #161616;
+            border: 1px solid #222;
+            border-radius: 14px;
+            padding: 18px;
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .fragment-content-body h2 {
+            font-size: 18px;
+            color: #d4af37;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+        .fragment-content-body p {
+            font-size: 14px;
+            color: #bbb;
+            line-height: 1.6;
+        }
+
+        /* Deposit UI Package Grid */
+        .deposit-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .deposit-card {
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .deposit-card:hover, .deposit-card.selected-card {
+            border-color: #d4af37;
+            background: #28241a;
+        }
+        .deposit-details h4 {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+        .deposit-details p {
+            color: #d4af37;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        /* Two-Step Payment Layout */
+        .payment-gateway-box {
+            margin-top: 15px;
+            border-top: 1px dashed #443410;
+            padding-top: 15px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .payment-option-btn {
+            background: #1e1e1e;
+            border: 1px solid #d4af37;
+            color: #fff;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .payment-option-btn:hover {
+            background: #d4af37;
+            color: #000;
+        }
+
+        /* History Table Configuration */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .history-card {
+            background: #1d1d1d;
+            border-left: 4px solid #d4af37;
+            padding: 12px;
+            border-radius: 6px;
+        }
+        .hist-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .badge-status {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .status-processing { background: #b38728; color: #000; }
+        .status-completed { background: #28a745; color: #fff; }
+
         .logout-container {
             display: flex;
             justify-content: center;
-            margin-top: 15px;
-            margin-bottom: 10px;
+            margin-top: 5px;
         }
         .logout-btn {
             background: transparent;
             color: #ff4d4d;
             border: 1px solid #ff4d4d;
-            padding: 8px 24px;
-            font-size: 14px;
+            padding: 6px 20px;
+            font-size: 13px;
             font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s ease;
-        }
-        .logout-btn:active {
-            background: rgba(255, 77, 77, 0.15);
-            transform: scale(0.95);
         }
 
-        /*--- Fixed Bottom Premium Confirm Button ---*/
         .confirm-btn {
             width: 100%;
-            padding: 18px;
+            padding: 16px;
             border-radius: 14px;
-            font-size: 18px;
+            font-size: 16px;
             text-transform: uppercase;
             font-weight: bold;
-            margin-bottom: 5px;
         }
 
-        /*--- CUSTOM PREMIUM AUTO-HIDE POPUP ---*/
+        /* Popup Notification */
         .premium-popup {
             position: fixed;
             top: -100px;
@@ -395,23 +581,21 @@
             transform: translateX(-50%);
             background: #1a1a1a;
             border: 1px solid #c5a059;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(197, 160, 89, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
             padding: 16px 24px;
             border-radius: 16px;
             display: flex;
             align-items: center;
             gap: 15px;
             z-index: 9999;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s ease;
             width: 90%;
             max-width: 380px;
             opacity: 0;
-            pointer-events: none;
         }
         .premium-popup.show {
             top: 30px;
             opacity: 1;
-            pointer-events: auto;
         }
         .popup-icon {
             width: 36px;
@@ -422,39 +606,54 @@
             justify-content: center;
             align-items: center;
             color: #000;
-            font-size: 18px;
-        }
-        .popup-content h4 {
-            color: #d4af37;
-            font-size: 16px;
-            margin-bottom: 2px;
-            font-weight: bold;
-        }
-        .popup-content p {
-            color: #cccccc;
-            font-size: 13px;
         }
     </style>
 </head>
 <body>
 
+<!-- NAVIGATION DRAWER SIDEBAR -->
+<div class="sidebar-overlay" id="menu-overlay" onclick="closeSidebarMenu()"></div>
+<div class="sidebar-menu" id="drawer-menu">
+    <div class="sidebar-header">
+        <h3>Navigation Menu</h3>
+        <i class="fas fa-times close-sidebar" onclick="closeSidebarMenu()"></i>
+    </div>
+    <div class="sidebar-links">
+        <div class="nav-item active-nav" onclick="switchFragment('order')"><i class="fas fa-shopping-cart"></i> Order</div>
+        <div class="nav-item" onclick="switchFragment('history')"><i class="fas fa-history"></i> History</div>
+        <div class="nav-item" onclick="switchFragment('deposit')"><i class="fas fa-wallet"></i> Deposit</div>
+        <div class="nav-item" onclick="switchFragment('terms')"><i class="fas fa-file-contract"></i> Terms</div>
+        <div class="nav-item" onclick="switchFragment('help')"><i class="fas fa-question-circle"></i> Help</div>
+    </div>
+    <div style="margin-top: auto;">
+        <button class="logout-btn" style="width:100%;" onclick="handleLogOut()">Log Out</button>
+    </div>
+</div>
+
 <div class="panel-container">
     
-    <div class="coins-badge" id="user-coins">
-        <div class="custom-coin-icon">C</div>
-        <span class="coin-amount" id="coin-txt">0</span>
+    <!-- TOP STATUS HEAD BAR -->
+    <div class="top-nav-bar" id="app-top-nav" style="display: none;">
+        <div class="left-nav">
+            <i class="fas fa-bars menu-toggle-btn" onclick="openSidebarMenu()"></i>
+            <h1 class="shimmer-text">CM SMM PANEL</h1>
+        </div>
+        <div class="coins-badge">
+            <div class="custom-coin-icon">C</div>
+            <span class="coin-amount" id="coin-txt">0</span>
+        </div>
     </div>
 
+    <!-- NOTIFICATION SYSTEM -->
     <div class="premium-popup" id="order-popup">
-        <div class="popup-icon">
-            <i class="fas fa-check"></i>
-        </div>
+        <div class="popup-icon"><i class="fas fa-check"></i></div>
         <div class="popup-content">
-            <h4>Order Placed Successfully!</h4>
-            <p>Your order will be fulfilled within 48 hours.</p>
+            <h4 style="color:#d4af37; font-weight:bold;" id="popup-title">Order Placed Successfully!</h4>
+            <p style="color:#ccc; font-size:12px;" id="popup-desc">Your configuration parameters have updated.</p>
         </div>
     </div>
 
+    <!-- LOGIN PANEL -->
     <div id="login-screen">
         <div class="login-header">
             <h2 class="shimmer-text">CHIEF USER LOGIN</h2>
@@ -463,7 +662,7 @@
         <div class="error-msg" id="login-error">Error!</div>
         <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" id="username-input" placeholder="Enter Name / Username" autocomplete="on">
+            <input type="text" id="username-input" placeholder="Enter Name / Username">
         </div>
         <div class="input-group">
             <i class="fas fa-lock"></i>
@@ -479,157 +678,214 @@
         </div>
     </div>
 
-    <div id="main-panel">
-        <div>
-            <div class="panel-header">
-                <h1 class="shimmer-text">CM SMM PANEL</h1>
-                <p>Welcome: <span id="user-display-name">...</span> <i class="fas fa-user-shield" style="font-size:12px;"></i></p>
+    <!-- MULTI-FRAGMENT CONTENT CONTAINER -->
+    <div class="fragment-container" id="main-panel" style="display: none;">
+        
+        <!-- FRAGMENT 1: ORDER SYSTEM -->
+        <div id="fragment-order" class="app-fragment active-fragment">
+            <div>
+                <div class="dashboard-status-card">
+                    <div class="card-icon-area"><i class="fas fa-wallet"></i></div>
+                    <div class="deposit-pitch">Looking to deposit</div>
+                    <button class="gold-btn mini-deposit-btn" onclick="switchFragment('deposit')">Deposit Now</button>
+                    
+                    <div class="status-row-title">Current Balance</div>
+                    <div class="status-row-value"><i class="fas fa-copyright" style="color:#d4af37;"></i> <span id="balance-card-txt">0</span></div>
+                    
+                    <div class="status-row-title">Your Total Spending</div>
+                    <div class="status-row-value" style="font-size:15px; color:#aaa;"><i class="fas fa-copyright"></i> <span id="spending-txt">0</span></div>
+                </div>
+
+                <div class="url-section">
+                    <div class="url-group">
+                        <i class="fab fa-instagram"></i>
+                        <input type="url" id="insta-url" placeholder="https://www.instagram.com/username/...">
+                    </div>
+                </div>
+
+                <div class="section-title"><i class="fas fa-cubes"></i> NEW ORDER</div>
             </div>
-            
-            <div class="url-section">
-                <div class="section-title">Enter Your Instagram URL</div>
-                <div class="url-group">
-                    <i class="fab fa-instagram"></i>
-                    <input type="url" id="insta-url" placeholder="https://www.instagram.com/username/..." autocomplete="off">
+
+            <div class="scrollable-services">
+                <div class="services-container">
+                    
+                    <!-- Instagram Follower -->
+                    <div class="service-item">
+                        <div class="service-header" onclick="toggleAccordion(this)">
+                            <div class="service-title-left"><i class="fab fa-instagram"></i> <span>Instagram follower</span></div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="price-row" onclick="selectService(this, 1000)">
+                                <span class="coins">1000</span><span>100 follower</span>
+                            </div>
+                            <div class="price-row" onclick="selectService(this, 10000)">
+                                <span class="coins">10000</span><span>1K follower</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instagram Like -->
+                    <div class="service-item">
+                        <div class="service-header" onclick="toggleAccordion(this)">
+                            <div class="service-title-left"><i class="fas fa-heart"></i> <span>Instagram Like</span></div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="price-row" onclick="selectService(this, 1000)">
+                                <span class="coins">1000</span><span>100 Like</span>
+                            </div>
+                            <div class="price-row" onclick="selectService(this, 10000)">
+                                <span class="coins">10000</span><span>1K Like</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instagram VIEW -->
+                    <div class="service-item">
+                        <div class="service-header" onclick="toggleAccordion(this)">
+                            <div class="service-title-left"><i class="fas fa-chart-line"></i> <span>Instagram VIEW</span></div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="price-row" onclick="selectService(this, 1000)">
+                                <span class="coins">1000</span><span>10k VIEW</span>
+                            </div>
+                            <div class="price-row" onclick="selectService(this, 10000)">
+                                <span class="coins">10000</span><span>100k VIEW</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instagram Comment -->
+                    <div class="service-item">
+                        <div class="service-header" onclick="toggleAccordion(this)">
+                            <div class="service-title-left"><i class="fas fa-comment"></i> <span>Instagram Comment</span></div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="price-row" onclick="selectService(this, 1000)">
+                                <span class="coins">1000</span><span>100 Comment</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instagram Story View -->
+                    <div class="service-item">
+                        <div class="service-header" onclick="toggleAccordion(this)">
+                            <div class="service-title-left"><i class="fas fa-history"></i> <span>Instagram story view</span></div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="price-row" onclick="selectService(this, 1000)">
+                                <span class="coins">1000</span><span>10k VIEW</span>
+                            </div>
+                            <div class="price-row" onclick="selectService(this, 10000)">
+                                <span class="coins">10000</span><span>100k VIEW</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
-            <div class="section-title">Order Service</div>
+            <button class="gold-btn confirm-btn" onclick="confirmOrder()">Confirm Order</button>
         </div>
 
-        <div class="scrollable-services">
-            <div class="services-container">
+        <!-- FRAGMENT 2: PERMANENT HISTORY -->
+        <div id="fragment-history" class="app-fragment">
+            <div class="fragment-content-body">
+                <h2>Order History Log</h2>
+                <div class="history-list" id="history-container">
+                    <p style="text-align:center; color:#666;">No orders found active.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FRAGMENT 3: DEPOSIT STACK -->
+        <div id="fragment-deposit" class="app-fragment">
+            <div class="fragment-content-body">
+                <h2>Add Coins Ledger</h2>
+                <p style="font-size:12px; margin-bottom:15px; color:#888;">Select a bundle from the professional options below to initiate your transaction secure stack.</p>
                 
-                <div class="service-item">
-                    <div class="service-header" onclick="toggleAccordion(this)">
-                        <div class="service-title-left">
-                            <i class="fab fa-instagram"></i>
-                            <span>Instagram Follower</span>
+                <div class="deposit-grid">
+                    <div class="deposit-card" onclick="selectDepositPack(this, 100, 10000)">
+                        <div class="deposit-details">
+                            <h4>Standard Bundle</h4>
+                            <p>+ 10,000 C-Coins</p>
                         </div>
-                        <i class="fas fa-chevron-down arrow"></i>
+                        <span style="color:#d4af37; font-weight:bold;">₹100 INR</span>
                     </div>
-                    <div class="service-content">
-                        <div class="price-row" onclick="selectService(this, 1000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 1000</span>
-                            <span>100 follower</span>
+                    <div class="deposit-card" onclick="selectDepositPack(this, 200, 20000)">
+                        <div class="deposit-details">
+                            <h4>Advanced Starter</h4>
+                            <p>+ 20,000 C-Coins</p>
                         </div>
-                        <div class="price-row" onclick="selectService(this, 10000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 10000</span>
-                            <span>1K follower</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 100000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 100000</span>
-                            <span>10k follower</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 1000000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 1000000</span>
-                            <span>100k follower</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 10000000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 10000000</span>
-                            <span>1M follower</span>
-                        </div>
+                        <span style="color:#d4af37; font-weight:bold;">₹200 INR</span>
                     </div>
-                </div>
-
-                <div class="service-item">
-                    <div class="service-header" onclick="toggleAccordion(this)">
-                        <div class="service-title-left">
-                            <i class="fas fa-heart" style="color: #ff2a5f;"></i>
-                            <span>Instagram Like</span>
+                    <div class="deposit-card" onclick="selectDepositPack(this, 500, 60000)">
+                        <div class="deposit-details">
+                            <h4>Premium Executive</h4>
+                            <p>+ 60,000 C-Coins</p>
                         </div>
-                        <i class="fas fa-chevron-down arrow"></i>
+                        <span style="color:#d4af37; font-weight:bold;">₹500 INR</span>
                     </div>
-                    <div class="service-content">
-                        <div class="price-row" onclick="selectService(this, 1000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 1000</span>
-                            <span>100 Like</span>
+                    <div class="deposit-card" onclick="selectDepositPack(this, 1000, 200000)">
+                        <div class="deposit-details">
+                            <h4>Ultimate Chief Pack</h4>
+                            <p>+ 200,000 C-Coins</p>
                         </div>
-                        <div class="price-row" onclick="selectService(this, 10000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 10000</span>
-                            <span>1K Like</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 100000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 100000</span>
-                            <span>10k Like</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 1000000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 1000000</span>
-                            <span>100k Like</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 10000000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 10000000</span>
-                            <span>1M Like</span>
-                        </div>
+                        <span style="color:#d4af37; font-weight:bold;">₹1000 INR</span>
                     </div>
                 </div>
 
-                <div class="service-item">
-                    <div class="service-header" onclick="toggleAccordion(this)">
-                        <div class="service-title-left">
-                            <i class="fas fa-comment"></i>
-                            <span>Instagram Comment</span>
-                        </div>
-                        <i class="fas fa-chevron-down arrow"></i>
-                    </div>
-                    <div class="service-content">
-                        <div class="price-row" onclick="selectService(this, 1000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 1000</span>
-                            <span>100 Comment</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 10000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 10000</span>
-                            <span>1K Comment</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 100000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 100000</span>
-                            <span>10k Comment</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 1000000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 1000000</span>
-                            <span>100k Comment</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 10000000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 10000000</span>
-                            <span>1M Comment</span>
-                        </div>
+                <!-- Hidden Step 2: Select Payment Method Box -->
+                <div class="payment-gateway-box" id="payment-box">
+                    <p style="font-size:13px; color:#d4af37; font-weight:600; margin-top:5px;"><i class="fas fa-credit-card"></i> Select Payment Method</p>
+                    <div class="payment-option-btn" onclick="executeRazorpaySimulation()">
+                        <span><i class="fab fa-google-pay" style="font-size:18px; margin-right:8px;"></i> All UPI Accepted (Razorpay Secure Gateway)</span>
+                        <i class="fas fa-chevron-right"></i>
                     </div>
                 </div>
-
-                <div class="service-item">
-                    <div class="service-header" onclick="toggleAccordion(this)">
-                        <div class="service-title-left">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Instagram VIEW</span>
-                        </div>
-                        <i class="fas fa-chevron-down arrow"></i>
-                    </div>
-                    <div class="service-content">
-                        <div class="price-row" onclick="selectService(this, 1000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 1000</span>
-                            <span>10k VIEW</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 10000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 10000</span>
-                            <span>100k VIEW</span>
-                        </div>
-                        <div class="price-row" onclick="selectService(this, 100000)">
-                            <span class="coins"><i class="fas fa-copyright"></i> 100000</span>
-                            <span>1M VIEW</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="logout-container">
-                    <button class="logout-btn" onclick="handleLogOut()">
-                        <i class="fas fa-sign-out-alt"></i> Log Out
-                    </button>
-                </div>
-
             </div>
         </div>
 
-        <button class="gold-btn confirm-btn" onclick="confirmOrder()">Confirm Order</button>
+        <!-- FRAGMENT 4: TERMS & CONDITIONS (EXTENDED) -->
+        <div id="fragment-terms" class="app-fragment">
+            <div class="fragment-content-body">
+                <h2>Terms of Platform Service</h2>
+                <p style="margin-bottom:12px; font-weight:bold; color:#fff;">1. Introduction & Account Registration</p>
+                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">By creating a security access profile inside CM SMM PANEL, you explicitly agree to align completely with all policies documented herein. All panel processing tasks deployment starts automatically within secure database queues. The system architecture holds permanent validation logs for each session runtime node.</p>
+                
+                <p style="margin-bottom:12px; font-weight:bold; color:#fff;">2. Order Operations & Non-Refundable Architecture</p>
+                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">Users are strictly advised not to submit duplicate URL links while a previous matching setup is processing inside the live node threads. Once an automated background microservice hooks an incoming configuration, structural balance deductions become total and permanent. Conversion nodes are securely tied down per platform profile and cannot be re-credited manually.</p>
+                
+                <p style="margin-bottom:12px; font-weight:bold; color:#fff;">3. Payment Processing & Razorpay Standards</p>
+                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">All financial deposit modules routing through external payment integrations (such as Razorpay systems) are subjected to heavy validation algorithms. In case of network drops or gateway drops mid-transit, validation pipelines might require a 24-to-48 hour window to reconcile transactional ledger states globally.</p>
+
+                <p style="margin-bottom:12px; font-weight:bold; color:#fff;">4. Data Integrity & Global Tracking Logs</p>
+                <p style="margin-size:13px; text-align:justify;">System database tables track total structural coin consumption lifecycle details accurately across cross-border network arrays. Attempting structural manipulation or reverse API query scripting triggers direct absolute profile termination without notice.</p>
+            </div>
+        </div>
+
+        <!-- FRAGMENT 5: CUSTOMER HELP DESK (EXTENDED) -->
+        <div id="fragment-help" class="app-fragment">
+            <div class="fragment-content-body">
+                <h2>Automated Support Desk</h2>
+                <p style="margin-bottom:15px; text-align:justify;">Facing layout configurations error, architectural latency, or failed network transactions logs? Feel free to contact the central operations node dispatcher right away. Our administrative panel works around the clock to analyze structural drops and operational faults within database tables.</p>
+                
+                <div style="background:#222; padding:15px; border-radius:12px; border:1px solid #333; margin-bottom:20px;">
+                    <span style="color:#d4af37; font-weight:bold; font-size:13px; display:block; margin-bottom:6px;"><i class="fas fa-envelope"></i> Core Dispatcher Email</span>
+                    <span style="color:#fff; font-size:15px; letter-spacing:0.5px; font-weight:600;">cmsmmpannel@gmail.com</span>
+                </div>
+
+                <p style="font-weight:bold; color:#fff; margin-bottom:10px;">Frequently Answered Queries:</p>
+                <div style="display:flex; flex-direction:column; gap:12px; font-size:13px; color:#aaa;">
+                    <p><strong>Q: My payment went through but balance hasn't updated?</strong><br>A: Kindly wait up to 10 minutes for Razorpay routing hooks to automatically communicate synchronization strings back to Firebase database fields.</p>
+                    <p><strong>Q: Can I cancellation an entry mid-processing state?</strong><br>A: As soon as a transaction registers inside the historical ledger, automation threads lock execution queues instantly. Modifications are highly barred.</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -638,7 +894,6 @@
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, onValue, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
         authDomain: "chief-login12.firebaseapp.com",
@@ -650,27 +905,55 @@
         measurementId: "G-CB9F743N3M"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
 
     let loggedInUsername = ""; 
     let userCurrentCoins = 0;
+    let userTotalSpending = 0;
     let selectedPrice = 0;
     let selectedServiceText = "";
+    
+    // Deposit state holding variables
+    let pendingDepositInr = 0;
+    let pendingDepositCoins = 0;
+    
     let coinListenerUnsubscribe = null;
+    let spendingListenerUnsubscribe = null;
+    let historyListenerUnsubscribe = null;
 
-    // AUTO LOGIN CHECK: सेशन मैनेजमेंट
+    window.openSidebarMenu = function() {
+        document.getElementById('drawer-menu').classList.add('open');
+        document.getElementById('menu-overlay').style.display = 'block';
+    }
+    window.closeSidebarMenu = function() {
+        document.getElementById('drawer-menu').classList.remove('open');
+        document.getElementById('menu-overlay').style.display = 'none';
+    }
+
+    window.switchFragment = function(targetName) {
+        closeSidebarMenu();
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active-nav'));
+        const activeNavEl = Array.from(document.querySelectorAll('.nav-item')).find(el => el.innerText.toLowerCase().includes(targetName));
+        if(activeNavEl) activeNavEl.classList.add('active-nav');
+
+        document.querySelectorAll('.app-fragment').forEach(frag => frag.classList.remove('active-fragment'));
+        const targetFrag = document.getElementById('fragment-' + targetName);
+        if(targetFrag) targetFrag.classList.add('active-fragment');
+        
+        // Reset dynamic payment structures when switching away
+        if(targetName !== 'deposit') {
+            document.querySelectorAll('.deposit-card').forEach(c => c.classList.remove('selected-card'));
+            document.getElementById('payment-box').style.display = 'none';
+        }
+    }
+
     onAuthStateChanged(auth, (user) => {
         if (user) {
             const savedName = localStorage.getItem("cm_saved_username");
-            if (savedName) {
-                loggedInUsername = savedName;
-            } else {
-                loggedInUsername = user.email.split('@')[0];
-                localStorage.setItem("cm_saved_username", loggedInUsername);
-            }
+            loggedInUsername = savedName ? savedName : user.email.split('@')[0];
+            if(!savedName) localStorage.setItem("cm_saved_username", loggedInUsername);
             showMainPanel();
         } else {
             showLoginScreen();
@@ -678,33 +961,77 @@
     });
 
     function showMainPanel() {
-        document.getElementById('user-display-name').innerText = loggedInUsername.toUpperCase();
         document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-top-nav').style.display = 'flex';
         document.getElementById('main-panel').style.display = 'flex'; 
-        document.getElementById('user-coins').style.display = 'flex'; 
+        switchFragment('order');
 
-        // लाइव कॉइन्स लोड करना शुरू करें
+        // Coins Observer Node
         if(coinListenerUnsubscribe) coinListenerUnsubscribe();
-        const coinRef = ref(database, 'users/' + loggedInUsername + '/coins');
-        coinListenerUnsubscribe = onValue(coinRef, (snapshot) => {
-            const data = snapshot.val();
-            userCurrentCoins = data ? parseInt(data) : 0;
+        coinListenerUnsubscribe = onValue(ref(database, 'users/' + loggedInUsername + '/coins'), (snapshot) => {
+            userCurrentCoins = snapshot.val() ? parseInt(snapshot.val()) : 0;
             document.getElementById('coin-txt').innerText = userCurrentCoins.toLocaleString();
+            document.getElementById('balance-card-txt').innerText = userCurrentCoins.toLocaleString();
+        });
+
+        // Lifetime Spending Observer Node
+        if(spendingListenerUnsubscribe) spendingListenerUnsubscribe();
+        spendingListenerUnsubscribe = onValue(ref(database, 'users/' + loggedInUsername + '/spending'), (snapshot) => {
+            userTotalSpending = snapshot.val() ? parseInt(snapshot.val()) : 0;
+            document.getElementById('spending-txt').innerText = userTotalSpending.toLocaleString();
+        });
+
+        // Dynamic History Log Logger
+        if(historyListenerUnsubscribe) historyListenerUnsubscribe();
+        historyListenerUnsubscribe = onValue(ref(database, 'orders'), (snapshot) => {
+            const container = document.getElementById('history-container');
+            container.innerHTML = "";
+            const data = snapshot.val();
+            
+            if(!data) {
+                container.innerHTML = `<p style="text-align:center; color:#666;">No orders found active.</p>`;
+                return;
+            }
+
+            let userOrdersHtml = "";
+            const currentTimestamp = Date.now();
+            const fiveHoursInMs = 5 * 60 * 60 * 1000;
+
+            Object.keys(data).reverse().forEach(key => {
+                const order = data[key];
+                if(order.username === loggedInUsername) {
+                    let status = "PROCESSING";
+                    let statusClass = "status-processing";
+                    
+                    if(order.timestamp && (currentTimestamp - order.timestamp) >= fiveHoursInMs) {
+                        status = "COMPLETED";
+                        statusClass = "status-completed";
+                    }
+
+                    userOrdersHtml += `
+                        <div class="history-card">
+                            <div class="hist-row"><strong>${order.package}</strong> <span class="badge-status ${statusClass}">${status}</span></div>
+                            <div class="hist-row" style="color:#aaa; font-size:12px; word-break:break-all;">Link: ${order.instagram_url}</div>
+                            <div class="hist-row" style="color:#666; font-size:11px; margin-top:4px;"><span>${order.date} | ${order.time}</span> <span style="color:#d4af37;">-${order.coins_deducted} C</span></div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = userOrdersHtml || `<p style="text-align:center; color:#666;">No orders found active.</p>`;
         });
     }
 
     function showLoginScreen() {
         document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('app-top-nav').style.display = 'none';
         document.getElementById('main-panel').style.display = 'none'; 
-        document.getElementById('user-coins').style.display = 'none';
         document.getElementById('login-btn-txt').innerText = "Secure Login";
-        if(coinListenerUnsubscribe) {
-            coinListenerUnsubscribe();
-            coinListenerUnsubscribe = null;
-        }
+        if(coinListenerUnsubscribe) coinListenerUnsubscribe();
+        if(spendingListenerUnsubscribe) spendingListenerUnsubscribe();
+        if(historyListenerUnsubscribe) historyListenerUnsubscribe();
     }
 
-    // Secure Login Handler
     window.handleLogin = function() {
         const userInput = document.getElementById('username-input').value.trim();
         const passInp = document.getElementById('password').value.trim();
@@ -720,18 +1047,11 @@
         loginBtn.innerText = "Verifying...";
         errorMsg.style.display = 'none';
 
-        let fullEmail = userInput;
-        if (!userInput.includes('@')) {
-            fullEmail = userInput + "@chiefwatch.com";
-        }
-
+        let fullEmail = userInput.includes('@') ? userInput : userInput + "@chiefwatch.com";
         loggedInUsername = userInput.split('@')[0];
         localStorage.setItem("cm_saved_username", loggedInUsername);
 
         signInWithEmailAndPassword(auth, fullEmail, passInp)
-            .then(() => {
-                // onAuthStateChanged handle karega screen switch
-            })
             .catch((error) => {
                 loginBtn.innerText = "Secure Login";
                 errorMsg.innerText = "Error: Invalid username or password!";
@@ -740,90 +1060,91 @@
             });
     }
 
-    // Log Out Handler
     window.handleLogOut = function() {
         if(confirm("Are you sure you want to log out?")) {
+            closeSidebarMenu();
             localStorage.removeItem("cm_saved_username");
-            signOut(auth).then(() => {
-                showLoginScreen();
-            }).catch((err) => {
-                alert("Logout Failed: " + err.message);
-            });
+            signOut(auth).then(() => { showLoginScreen(); });
         }
     }
 
-    // Selection Logic
-    window.selectService = function(element, price) {
-        document.querySelectorAll('.price-row').forEach(row => {
-            row.style.background = 'transparent';
-            row.style.borderLeft = 'none';
-        });
-        element.style.background = 'rgba(214, 175, 54, 0.15)';
-        element.style.borderLeft = '4px solid #d4af37';
+    // 2-Step Deposit Selection Flow
+    window.selectDepositPack = function(element, amountInr, creditCoins) {
+        document.querySelectorAll('.deposit-card').forEach(c => c.classList.remove('selected-card'));
+        element.classList.add('selected-card');
         
-        selectedPrice = price;
-        selectedServiceText = element.querySelector('span:not(.coins)').innerText;
+        pendingDepositInr = amountInr;
+        pendingDepositCoins = creditCoins;
+
+        // Slide down method selector box
+        const payBox = document.getElementById('payment-box');
+        payBox.style.display = 'flex';
+        payBox.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Confirm Order
+    // Razorpay Integration Hook point
+    window.executeRazorpaySimulation = function() {
+        if(pendingDepositInr === 0 || pendingDepositCoins === 0) return;
+        
+        if(confirm(`Routing transaction to Razorpay Gateway Secure APIs for ₹${pendingDepositInr} INR?`)) {
+            const finalCoins = userCurrentCoins + pendingDepositCoins;
+            set(ref(database, 'users/' + loggedInUsername + '/coins'), finalCoins)
+                .then(() => {
+                    showCustomPopup("Payment Completed!", `Successfully processed via Razorpay. +${pendingDepositCoins.toLocaleString()} Coins added.`);
+                    // Reset selection layouts
+                    document.querySelectorAll('.deposit-card').forEach(c => c.classList.remove('selected-card'));
+                    document.getElementById('payment-box').style.display = 'none';
+                    pendingDepositInr = 0;
+                    pendingDepositCoins = 0;
+                }).catch(err => alert("Gateway sync failure: " + err.message));
+        }
+    }
+
+    window.selectService = function(element, price) {
+        document.querySelectorAll('.price-row').forEach(row => row.style.background = 'transparent');
+        element.style.background = 'rgba(214, 175, 54, 0.15)';
+        selectedPrice = price;
+        selectedServiceText = element.parentElement.parentElement.querySelector('.service-title-left span').innerText + " - " + element.querySelector('span:not(.coins)').innerText;
+    }
+
     window.confirmOrder = function() {
         const urlInput = document.getElementById('insta-url').value.trim();
-        
-        if(!urlInput) {
-            alert('Please enter your Instagram URL first!');
-            return;
-        }
-        if(!selectedServiceText || selectedPrice === 0) {
-            alert('Please select a service package from the list!');
-            return;
-        }
-        
-        if(userCurrentCoins < selectedPrice) {
-            alert('Insufficient Coins!\nYou need ' + selectedPrice + ' coins but you only have ' + userCurrentCoins + '.');
-            return;
-        }
+        if(!urlInput) { alert('Please enter your Instagram URL first!'); return; }
+        if(!selectedServiceText || selectedPrice === 0) { alert('Please select a package from the list!'); return; }
+        if(userCurrentCoins < selectedPrice) { alert('Insufficient Coins!'); return; }
 
         const newCoinsAmount = userCurrentCoins - selectedPrice;
+        const newLifetimeSpending = userTotalSpending + selectedPrice;
         const currentDateTime = new Date();
-        const orderDate = currentDateTime.toLocaleDateString('en-GB'); 
-        const orderTime = currentDateTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
+        
         const orderDetails = {
             username: loggedInUsername,
             instagram_url: urlInput,
             package: selectedServiceText,
             coins_deducted: selectedPrice,
-            date: orderDate,
-            time: orderTime,
+            date: currentDateTime.toLocaleDateString('en-GB'),
+            time: currentDateTime.toLocaleTimeString('en-US'),
             timestamp: Date.now()
         };
 
-        const ordersRef = ref(database, 'orders');
-        const newOrderPushRef = push(ordersRef);
-        
-        set(newOrderPushRef, orderDetails)
+        set(push(ref(database, 'orders')), orderDetails)
+            .then(() => emailjs.send("service_r1nva6e", "template_6gww5fp", orderDetails))
+            .then(() => set(ref(database, 'users/' + loggedInUsername + '/coins'), newCoinsAmount))
+            .then(() => set(ref(database, 'users/' + loggedInUsername + '/spending'), newLifetimeSpending))
             .then(() => {
-                // EmailJS के ज़रिए ईमेल भेजने का कोड यहाँ सेट किया गया है
-                return emailjs.send("service_r1nva6e", "template_6gww5fp", orderDetails);
-            })
-            .then(() => {
-                return set(ref(database, 'users/' + loggedInUsername + '/coins'), newCoinsAmount);
-            })
-            .then(() => {
-                const popup = document.getElementById('order-popup');
-                popup.classList.add('show');
+                showCustomPopup("Order Placed Successfully!", "Your processing queue task will status auto-complete in 5 Hours.");
                 document.getElementById('insta-url').value = "";
-                
-                setTimeout(() => {
-                    popup.classList.remove('show');
-                }, 2000);
-            })
-            .catch((err) => {
-                alert('Order Error: ' + err.message);
-            });
+            }).catch(err => alert("Queue error: " + err.message));
     }
 
-    // Accordion Control
+    function showCustomPopup(title, desc) {
+        document.getElementById('popup-title').innerText = title;
+        document.getElementById('popup-desc').innerText = desc;
+        const popup = document.getElementById('order-popup');
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 3500);
+    }
+
     window.toggleAccordion = function(element) {
         const item = element.parentElement;
         const content = item.querySelector('.service-content');
@@ -841,13 +1162,8 @@
         } else {
             item.classList.add('active');
             content.style.maxHeight = content.scrollHeight + "px"; 
-            
-            setTimeout(() => {
-                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 200);
         }
     }
 </script>
-
 </body>
 </html>
