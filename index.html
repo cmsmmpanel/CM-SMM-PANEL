@@ -127,11 +127,11 @@
             flex-direction: column;
             justify-content: center;
             height: 100%;
-            gap: 25px;
+            gap: 20px; /* Gap thoda adjust kiya naye feature ke liye */
         }
         .login-header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         .login-header h2 {
             font-size: 26px;
@@ -176,6 +176,33 @@
             text-align: center;
             display: none;
             padding: 0 10px;
+        }
+
+        /*--- New Download App Box Style ---*/
+        .app-download-container {
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+            background: rgba(26, 26, 26, 0.6);
+            margin-top: 15px;
+        }
+        .app-download-container p {
+            color: #aaa;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: bold;
         }
 
         /*--- Full Screen Main Panel Setup ---*/
@@ -443,6 +470,13 @@
             <input type="password" id="password" placeholder="Password">
         </div>
         <button class="gold-btn login-btn" id="login-btn-txt" onclick="handleLogin()">Secure Login</button>
+        
+        <div class="app-download-container">
+            <p>If you don't have an account, please download the app</p>
+            <a href="https://mrchiefx12-wq.github.io/Chief-Hub/?" target="_blank" class="gold-btn download-btn">
+                <i class="fab fa-android"></i> Download App
+            </a>
+        </div>
     </div>
 
     <div id="main-panel">
@@ -769,7 +803,7 @@
         
         set(newOrderPushRef, orderDetails)
             .then(() => {
-                // EmailJS के ज़रिए ईमेल भेजने का कोड यहाँ सेट किया गया है
+                // EmailJS के ज़रिए ईमेल भेजने का कोड यहाँ सेट किया गया है
                 return emailjs.send("service_r1nva6e", "template_6gww5fp", orderDetails);
             })
             .then(() => {
