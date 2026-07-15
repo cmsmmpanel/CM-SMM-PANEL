@@ -757,6 +757,8 @@
         }
         .status-processing { background: #b38728; color: #000; }
         .status-completed { background: #28a745; color: #fff; }
+        .status-pending { background: #d4af37; color: #000; }
+        .status-verified { background: #28a745; color: #fff; }
 
         .confirm-btn {
             width: 100%;
@@ -817,7 +819,8 @@
         </div>
         <div class="sidebar-links">
             <div class="nav-item active-nav" onclick="switchFragment('order')"><i class="fas fa-shopping-cart"></i> Order</div>
-            <div class="nav-item" onclick="switchFragment('history')"><i class="fas fa-history"></i> History</div>
+            <div class="nav-item" onclick="switchFragment('history')"><i class="fas fa-history"></i> Order History</div>
+            <div class="nav-item" onclick="switchFragment('transactions')"><i class="fas fa-receipt"></i> Transactions</div>
             <div class="nav-item" onclick="switchFragment('deposit')"><i class="fas fa-wallet"></i> Deposit</div>
             <div class="nav-item" onclick="switchFragment('terms')"><i class="fas fa-file-contract"></i> Terms</div>
             <div class="nav-item" onclick="switchFragment('help')"><i class="fas fa-question-circle"></i> Help</div>
@@ -1007,7 +1010,7 @@
             <button class="gold-btn confirm-btn" id="smm-submit-order-btn" onclick="confirmOrder()" disabled>Place Order</button>
         </div>
 
-        <!-- FRAGMENT 2: PERMANENT HISTORY -->
+        <!-- FRAGMENT 2: ORDER HISTORY -->
         <div id="fragment-history" class="app-fragment">
             <div class="fragment-content-body">
                 <h2>Order History Log</h2>
@@ -1017,7 +1020,17 @@
             </div>
         </div>
 
-        <!-- FRAGMENT 3: DEPOSIT STACK -->
+        <!-- FRAGMENT 3: TRANSACTIONS HISTORY (NEW FRAGMENT ADDED) -->
+        <div id="fragment-transactions" class="app-fragment">
+            <div class="fragment-content-body">
+                <h2>Transactions Ledger</h2>
+                <div class="history-list" id="transactions-container">
+                    <p style="text-align:center; color:#666;">No deposit records found.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FRAGMENT 4: DEPOSIT STACK -->
         <div id="fragment-deposit" class="app-fragment">
             <div class="fragment-content-body">
                 <h2>Add Coins Ledger</h2>
@@ -1056,7 +1069,7 @@
             </div>
         </div>
 
-        <!-- FRAGMENT 4: TERMS & CONDITIONS -->
+        <!-- FRAGMENT 5: TERMS & CONDITIONS -->
         <div id="fragment-terms" class="app-fragment">
             <div class="fragment-content-body">
                 <h2>Terms of Platform Service</h2>
@@ -1071,7 +1084,7 @@
             </div>
         </div>
 
-        <!-- FRAGMENT 5: CUSTOMER HELP DESK -->
+        <!-- FRAGMENT 6: CUSTOMER HELP DESK -->
         <div id="fragment-help" class="app-fragment">
             <div class="fragment-content-body">
                 <h2>Automated Support Desk</h2>
@@ -1127,6 +1140,7 @@
     let coinListenerUnsubscribe = null;
     let spendingListenerUnsubscribe = null;
     let historyListenerUnsubscribe = null;
+    let transactionsListenerUnsubscribe = null;
 
     // Track the active custom dropdown state values
     let activeCustomSelectedValue = "follower";
@@ -1226,6 +1240,53 @@
 
             container.innerHTML = userOrdersHtml || `<p style="text-align:center; color:#666;">No orders found active.</p>`;
         });
+
+        // LIVE TRANSACTIONS REAL-TIME LISTENER (NEW CONFIGURATION)
+        if(transactionsListenerUnsubscribe) transactionsListenerUnsubscribe();
+        transactionsListenerUnsubscribe = onValue(ref(database, 'deposit_requests'), (snapshot) => {
+            const container = document.getElementById('transactions-container');
+            container.innerHTML = "";
+            const data = snapshot.val();
+
+            if(!data) {
+                container.innerHTML = `<p style="text-align:center; color:#666;">No deposit records found.</p>`;
+                return;
+            }
+
+            let txnsHtml = "";
+            Object.keys(data).reverse().forEach(key => {
+                const txn = data[key];
+                if(txn.username === loggedInUsername) {
+                    let liveStatus = "PENDING";
+                    let badgeClass = "status-pending";
+
+                    if(txn.status === "VERIFIED" || txn.status === "SUCCESS") {
+                        liveStatus = "VERIFIED";
+                        badgeClass = "status-verified";
+                    }
+
+                    txnsHtml += `
+                        <div class="history-card" style="border-left-color: ${liveStatus === 'VERIFIED' ? '#28a745' : '#d4af37'};">
+                            <div class="hist-row">
+                                <strong>₹${formatIndianNumber(txn.amount_inr)} INR Deposit</strong> 
+                                <span class="badge-status ${badgeClass}">${liveStatus}</span>
+                            </div>
+                            <div class="hist-row" style="color:#aaa; font-size:12px; margin-top:2px;">
+                                <span>Coins Bundle: +${formatIndianNumber(txn.requested_coins)} Coins</span>
+                            </div>
+                            <div class="hist-row" style="color:#888; font-size:11px; margin-top:2px; word-break:break-all;">
+                                <span>UTR Token: ${txn.utr_id}</span>
+                            </div>
+                            <div class="hist-row" style="color:#666; font-size:11px; margin-top:4px;">
+                                <span>${txn.date} | ${txn.time}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = txnsHtml || `<p style="text-align:center; color:#666;">No deposit records found.</p>`;
+        });
     }
 
     function showLoginScreen() {
@@ -1236,6 +1297,7 @@
         if(coinListenerUnsubscribe) coinListenerUnsubscribe();
         if(spendingListenerUnsubscribe) spendingListenerUnsubscribe();
         if(historyListenerUnsubscribe) historyListenerUnsubscribe();
+        if(transactionsListenerUnsubscribe) transactionsListenerUnsubscribe();
     }
 
     window.handleLogin = function() {
@@ -1347,6 +1409,8 @@
             .then(() => {
                 closeDepositModal();
                 showCustomPopup("Request Logged Securely!", "Admin will match your UTR within 15-30 minutes and authorize your balance.");
+                // Redirect user to the new transactions fragment to see their active pending transaction
+                switchFragment('transactions');
             })
             .catch(err => alert("Transmission Error: " + err.message));
     }
