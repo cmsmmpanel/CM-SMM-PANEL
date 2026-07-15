@@ -66,7 +66,7 @@
             transform: scale(0.98);
         }
 
-        /*--- Sidebar Drawer Navigation ---*/
+        /*--- Sidebar Drawer Navigation (Fixed Log Out visibility) ---*/
         .sidebar-menu {
             position: fixed;
             top: 0;
@@ -80,7 +80,8 @@
             padding: 25px 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            justify-content: space-between; /* Ensures logout stays at bottom */
+            overflow-y: auto; /* Safe fallback scroll if screen is very short */
         }
         .sidebar-menu.open {
             left: 0;
@@ -101,6 +102,7 @@
             align-items: center;
             border-bottom: 1px solid #2a2a2a;
             padding-bottom: 15px;
+            margin-bottom: 15px;
         }
         .sidebar-header h3 {
             font-size: 18px;
@@ -115,6 +117,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex-grow: 1; /* Pushes the next container downward */
         }
         .nav-item {
             padding: 14px 16px;
@@ -635,19 +638,25 @@
         .status-completed { background: #28a745; color: #fff; }
 
         .logout-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 5px;
+            width: 100%;
+            padding-top: 15px;
+            border-top: 1px solid #2a2a2a;
+            margin-top: 15px;
         }
         .logout-btn {
-            background: transparent;
+            background: rgba(255, 77, 77, 0.1);
             color: #ff4d4d;
             border: 1px solid #ff4d4d;
-            padding: 6px 20px;
-            font-size: 13px;
+            padding: 12px 20px;
+            font-size: 14px;
             font-weight: 600;
-            border-radius: 50px;
+            border-radius: 10px;
             cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .logout-btn:active {
+            background: rgba(255, 77, 77, 0.25);
         }
 
         .confirm-btn {
@@ -702,19 +711,21 @@
 <!-- NAVIGATION DRAWER SIDEBAR -->
 <div class="sidebar-overlay" id="menu-overlay" onclick="closeSidebarMenu()"></div>
 <div class="sidebar-menu" id="drawer-menu">
-    <div class="sidebar-header">
-        <h3>Navigation Menu</h3>
-        <i class="fas fa-times close-sidebar" onclick="closeSidebarMenu()"></i>
+    <div>
+        <div class="sidebar-header">
+            <h3>Navigation Menu</h3>
+            <i class="fas fa-times close-sidebar" onclick="closeSidebarMenu()"></i>
+        </div>
+        <div class="sidebar-links">
+            <div class="nav-item active-nav" onclick="switchFragment('order')"><i class="fas fa-shopping-cart"></i> Order</div>
+            <div class="nav-item" onclick="switchFragment('history')"><i class="fas fa-history"></i> History</div>
+            <div class="nav-item" onclick="switchFragment('deposit')"><i class="fas fa-wallet"></i> Deposit</div>
+            <div class="nav-item" onclick="switchFragment('terms')"><i class="fas fa-file-contract"></i> Terms</div>
+            <div class="nav-item" onclick="switchFragment('help')"><i class="fas fa-question-circle"></i> Help</div>
+        </div>
     </div>
-    <div class="sidebar-links">
-        <div class="nav-item active-nav" onclick="switchFragment('order')"><i class="fas fa-shopping-cart"></i> Order</div>
-        <div class="nav-item" onclick="switchFragment('history')"><i class="fas fa-history"></i> History</div>
-        <div class="nav-item" onclick="switchFragment('deposit')"><i class="fas fa-wallet"></i> Deposit</div>
-        <div class="nav-item" onclick="switchFragment('terms')"><i class="fas fa-file-contract"></i> Terms</div>
-        <div class="nav-item" onclick="switchFragment('help')"><i class="fas fa-question-circle"></i> Help</div>
-    </div>
-    <div style="margin-top: auto;">
-        <button class="logout-btn" style="width:100%;" onclick="handleLogOut()">Log Out</button>
+    <div class="logout-container">
+        <button class="logout-btn" onclick="handleLogOut()"><i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>Log Out</button>
     </div>
 </div>
 
