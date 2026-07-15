@@ -493,7 +493,7 @@
             font-weight: bold;
         }
         
-        /* Two-Step Payment Layout */
+        /* Dynamic Premium Payment Layout via FamPay QR Engine */
         .payment-gateway-box {
             margin-top: 15px;
             border-top: 1px dashed #443410;
@@ -516,9 +516,43 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .payment-option-btn:hover {
-            background: #d4af37;
-            color: #000;
+        .qr-display-area {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            background: #111;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .qr-image-placeholder {
+            width: 190px;
+            height: 190px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .utr-input {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            text-align: center;
         }
 
         /* History Table Configuration */
@@ -648,8 +682,8 @@
     <div class="premium-popup" id="order-popup">
         <div class="popup-icon"><i class="fas fa-check"></i></div>
         <div class="popup-content">
-            <h4 style="color:#d4af37; font-weight:bold;" id="popup-title">Order Placed Successfully!</h4>
-            <p style="color:#ccc; font-size:12px;" id="popup-desc">Your configuration parameters have updated.</p>
+            <h4 style="color:#d4af37; font-weight:bold;" id="popup-title">Order Placed!</h4>
+            <p style="color:#ccc; font-size:12px;" id="popup-desc">Processing queues active.</p>
         </div>
     </div>
 
@@ -717,10 +751,10 @@
                         </div>
                         <div class="service-content">
                             <div class="price-row" onclick="selectService(this, 1000)">
-                                <span class="coins">1000</span><span>100 follower</span>
+                                <span class="coins">1,000</span><span>100 follower</span>
                             </div>
                             <div class="price-row" onclick="selectService(this, 10000)">
-                                <span class="coins">10000</span><span>1K follower</span>
+                                <span class="coins">10,000</span><span>1K follower</span>
                             </div>
                         </div>
                     </div>
@@ -733,10 +767,10 @@
                         </div>
                         <div class="service-content">
                             <div class="price-row" onclick="selectService(this, 1000)">
-                                <span class="coins">1000</span><span>100 Like</span>
+                                <span class="coins">1,000</span><span>100 Like</span>
                             </div>
                             <div class="price-row" onclick="selectService(this, 10000)">
-                                <span class="coins">10000</span><span>1K Like</span>
+                                <span class="coins">10,000</span><span>1K Like</span>
                             </div>
                         </div>
                     </div>
@@ -749,10 +783,10 @@
                         </div>
                         <div class="service-content">
                             <div class="price-row" onclick="selectService(this, 1000)">
-                                <span class="coins">1000</span><span>10k VIEW</span>
+                                <span class="coins">1,000</span><span>10k VIEW</span>
                             </div>
                             <div class="price-row" onclick="selectService(this, 10000)">
-                                <span class="coins">10000</span><span>100k VIEW</span>
+                                <span class="coins">10,000</span><span>100k VIEW</span>
                             </div>
                         </div>
                     </div>
@@ -765,7 +799,7 @@
                         </div>
                         <div class="service-content">
                             <div class="price-row" onclick="selectService(this, 1000)">
-                                <span class="coins">1000</span><span>100 Comment</span>
+                                <span class="coins">1,000</span><span>100 Comment</span>
                             </div>
                         </div>
                     </div>
@@ -778,10 +812,10 @@
                         </div>
                         <div class="service-content">
                             <div class="price-row" onclick="selectService(this, 1000)">
-                                <span class="coins">1000</span><span>10k VIEW</span>
+                                <span class="coins">1,000</span><span>10k VIEW</span>
                             </div>
                             <div class="price-row" onclick="selectService(this, 10000)">
-                                <span class="coins">10000</span><span>100k VIEW</span>
+                                <span class="coins">10,000</span><span>100k VIEW</span>
                             </div>
                         </div>
                     </div>
@@ -801,11 +835,11 @@
             </div>
         </div>
 
-        <!-- FRAGMENT 3: DEPOSIT STACK -->
+        <!-- FRAGMENT 3: DEPOSIT STACK WITH DYNAMIC UPI QR -->
         <div id="fragment-deposit" class="app-fragment">
             <div class="fragment-content-body">
                 <h2>Add Coins Ledger</h2>
-                <p style="font-size:12px; margin-bottom:15px; color:#888;">Select a bundle from the professional options below to initiate your transaction secure stack.</p>
+                <p style="font-size:12px; margin-bottom:15px; color:#888;">Select a professional bundle below to instantly trigger your dynamic payment options.</p>
                 
                 <div class="deposit-grid">
                     <div class="deposit-card" onclick="selectDepositPack(this, 100, 10000)">
@@ -832,46 +866,65 @@
                     <div class="deposit-card" onclick="selectDepositPack(this, 1000, 200000)">
                         <div class="deposit-details">
                             <h4>Ultimate Chief Pack</h4>
-                            <p>+ 200,000 C-Coins</p>
+                            <p>+ 2,00,000 C-Coins</p>
                         </div>
-                        <span style="color:#d4af37; font-weight:bold;">₹1000 INR</span>
+                        <span style="color:#d4af37; font-weight:bold;">₹1,000 INR</span>
                     </div>
                 </div>
 
-                <!-- Hidden Step 2: Select Payment Method Box -->
+                <!-- Step 2: Select Payment Method Box -->
                 <div class="payment-gateway-box" id="payment-box">
-                    <p style="font-size:13px; color:#d4af37; font-weight:600; margin-top:5px;"><i class="fas fa-credit-card"></i> Select Payment Method</p>
-                    <div class="payment-option-btn" onclick="executeRazorpaySimulation()">
-                        <span><i class="fab fa-google-pay" style="font-size:18px; margin-right:8px;"></i> All UPI Accepted (Razorpay Secure Gateway)</span>
-                        <i class="fas fa-chevron-right"></i>
+                    <p style="font-size:13px; color:#d4af37; font-weight:600; margin-top:5px;"><i class="fas fa-credit-card"></i> Payment Processing Engine</p>
+                    
+                    <!-- Mobile Direct App UPI Redirection Link -->
+                    <a id="mobile-upi-link" href="#" style="text-decoration:none; display:none; margin-bottom:8px;">
+                        <div class="payment-option-btn" style="background: linear-gradient(135deg, #1f1f1f, #292417);">
+                            <span><i class="fas fa-mobile-alt" style="font-size:16px; margin-right:8px; color:#d4af37;"></i> Pay Direct via Mobile App (GPay/PhonePe/FamPay)</span>
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+
+                    <div class="payment-option-btn" onclick="triggerQRGeneration()">
+                        <span><i class="fas fa-qrcode" style="font-size:16px; margin-right:8px;"></i> View Dynamic FamPay UPI QR Code</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+
+                    <!-- Dynamic QR Interface Generator Node -->
+                    <div class="qr-display-area" id="qr-display-container">
+                        <p style="color:#fff; font-size:13px; font-weight:bold;">Scan & Transact Exactly <span id="selected-amt-txt" style="color:#d4af37;">₹0</span></p>
+                        
+                        <div class="qr-image-placeholder">
+                            <img id="dynamic-qr-img" src="" alt="Dynamic Payment QR Code">
+                        </div>
+                        
+                        <p style="color:#aaa; font-size:11px; margin-top:5px;">After verification of successful payment, enter UTR ID:</p>
+                        <input type="text" id="utr-number" class="utr-input" placeholder="Enter 12-Digit Reference UTR Number">
+                        <button class="gold-btn" style="width:100%; padding:12px; border-radius:6px; font-size:13px; margin-top:5px;" onclick="submitTransactionRequest()">Submit Payment Token</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- FRAGMENT 4: TERMS & CONDITIONS (EXTENDED) -->
+        <!-- FRAGMENT 4: TERMS & CONDITIONS -->
         <div id="fragment-terms" class="app-fragment">
             <div class="fragment-content-body">
                 <h2>Terms of Platform Service</h2>
                 <p style="margin-bottom:12px; font-weight:bold; color:#fff;">1. Introduction & Account Registration</p>
-                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">By creating a security access profile inside CM SMM PANEL, you explicitly agree to align completely with all policies documented herein. All panel processing tasks deployment starts automatically within secure database queues. The system architecture holds permanent validation logs for each session runtime node.</p>
+                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">By creating a security access profile inside CM SMM PANEL, you explicitly agree to align completely with all policies documented herein. All panel processing tasks deployment starts automatically within secure database queues.</p>
                 
                 <p style="margin-bottom:12px; font-weight:bold; color:#fff;">2. Order Operations & Non-Refundable Architecture</p>
-                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">Users are strictly advised not to submit duplicate URL links while a previous matching setup is processing inside the live node threads. Once an automated background microservice hooks an incoming configuration, structural balance deductions become total and permanent. Conversion nodes are securely tied down per platform profile and cannot be re-credited manually.</p>
+                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">Users are strictly advised not to submit duplicate URL links while a previous matching setup is processing inside the live node threads. Once an automated background microservice hooks an incoming configuration, structural balance deductions become total and permanent.</p>
                 
-                <p style="margin-bottom:12px; font-weight:bold; color:#fff;">3. Payment Processing & Razorpay Standards</p>
-                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">All financial deposit modules routing through external payment integrations (such as Razorpay systems) are subjected to heavy validation algorithms. In case of network drops or gateway drops mid-transit, validation pipelines might require a 24-to-48 hour window to reconcile transactional ledger states globally.</p>
-
-                <p style="margin-bottom:12px; font-weight:bold; color:#fff;">4. Data Integrity & Global Tracking Logs</p>
-                <p style="margin-size:13px; text-align:justify;">System database tables track total structural coin consumption lifecycle details accurately across cross-border network arrays. Attempting structural manipulation or reverse API query scripting triggers direct absolute profile termination without notice.</p>
+                <p style="margin-bottom:12px; font-weight:bold; color:#fff;">3. Payment Processing & Verification Standards</p>
+                <p style="margin-bottom:16px; font-size:13px; text-align:justify;">All financial deposit modules routing through manual QR Code verification system (FamPay node arrays) are subjected to validation check algorithms. Attempting fraudulent duplicate entries triggers profile restrictions.</p>
             </div>
         </div>
 
-        <!-- FRAGMENT 5: CUSTOMER HELP DESK (EXTENDED) -->
+        <!-- FRAGMENT 5: CUSTOMER HELP DESK -->
         <div id="fragment-help" class="app-fragment">
             <div class="fragment-content-body">
                 <h2>Automated Support Desk</h2>
-                <p style="margin-bottom:15px; text-align:justify;">Facing layout configurations error, architectural latency, or failed network transactions logs? Feel free to contact the central operations node dispatcher right away. Our administrative panel works around the clock to analyze structural drops and operational faults within database tables.</p>
+                <p style="margin-bottom:15px; text-align:justify;">Facing layout configurations error, architectural latency, or failed network transactions logs? Feel free to contact the central operations node dispatcher right away.</p>
                 
                 <div style="background:#222; padding:15px; border-radius:12px; border:1px solid #333; margin-bottom:20px;">
                     <span style="color:#d4af37; font-weight:bold; font-size:13px; display:block; margin-bottom:6px;"><i class="fas fa-envelope"></i> Core Dispatcher Email</span>
@@ -880,8 +933,7 @@
 
                 <p style="font-weight:bold; color:#fff; margin-bottom:10px;">Frequently Answered Queries:</p>
                 <div style="display:flex; flex-direction:column; gap:12px; font-size:13px; color:#aaa;">
-                    <p><strong>Q: My payment went through but balance hasn't updated?</strong><br>A: Kindly wait up to 10 minutes for Razorpay routing hooks to automatically communicate synchronization strings back to Firebase database fields.</p>
-                    <p><strong>Q: Can I cancellation an entry mid-processing state?</strong><br>A: As soon as a transaction registers inside the historical ledger, automation threads lock execution queues instantly. Modifications are highly barred.</p>
+                    <p><strong>Q: My payment went through but balance hasn't updated?</strong><br>A: For manual FamPay UPI requests, please wait 15-30 minutes. Once admin matches the UTR token inside the bank ledger, coins get instantly synced to your profile balance.</p>
                 </div>
             </div>
         </div>
@@ -892,7 +944,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, onValue, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, onValue, set, push, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBPg9unSVyAs_NI2CiIvJd69PtBt1hrr5I",
@@ -909,19 +961,26 @@
     const auth = getAuth(app);
     const database = getDatabase(app);
 
+    // Target User Merchant UPI parameters configured per request instructions
+    const MERCHANT_UPI_ID = "michael-mahawar@fam";
+    const TRANSACTION_MERCHANT_NAME = "CM SMM PANEL";
+
     let loggedInUsername = ""; 
     let userCurrentCoins = 0;
     let userTotalSpending = 0;
     let selectedPrice = 0;
     let selectedServiceText = "";
     
-    // Deposit state holding variables
     let pendingDepositInr = 0;
     let pendingDepositCoins = 0;
     
     let coinListenerUnsubscribe = null;
     let spendingListenerUnsubscribe = null;
     let historyListenerUnsubscribe = null;
+
+    function formatIndianNumber(num) {
+        return num.toLocaleString('en-IN');
+    }
 
     window.openSidebarMenu = function() {
         document.getElementById('drawer-menu').classList.add('open');
@@ -942,10 +1001,10 @@
         const targetFrag = document.getElementById('fragment-' + targetName);
         if(targetFrag) targetFrag.classList.add('active-fragment');
         
-        // Reset dynamic payment structures when switching away
         if(targetName !== 'deposit') {
             document.querySelectorAll('.deposit-card').forEach(c => c.classList.remove('selected-card'));
             document.getElementById('payment-box').style.display = 'none';
+            document.getElementById('qr-display-container').style.display = 'none';
         }
     }
 
@@ -966,22 +1025,19 @@
         document.getElementById('main-panel').style.display = 'flex'; 
         switchFragment('order');
 
-        // Coins Observer Node
         if(coinListenerUnsubscribe) coinListenerUnsubscribe();
         coinListenerUnsubscribe = onValue(ref(database, 'users/' + loggedInUsername + '/coins'), (snapshot) => {
             userCurrentCoins = snapshot.val() ? parseInt(snapshot.val()) : 0;
-            document.getElementById('coin-txt').innerText = userCurrentCoins.toLocaleString();
-            document.getElementById('balance-card-txt').innerText = userCurrentCoins.toLocaleString();
+            document.getElementById('coin-txt').innerText = formatIndianNumber(userCurrentCoins);
+            document.getElementById('balance-card-txt').innerText = formatIndianNumber(userCurrentCoins);
         });
 
-        // Lifetime Spending Observer Node
         if(spendingListenerUnsubscribe) spendingListenerUnsubscribe();
         spendingListenerUnsubscribe = onValue(ref(database, 'users/' + loggedInUsername + '/spending'), (snapshot) => {
             userTotalSpending = snapshot.val() ? parseInt(snapshot.val()) : 0;
-            document.getElementById('spending-txt').innerText = userTotalSpending.toLocaleString();
+            document.getElementById('spending-txt').innerText = formatIndianNumber(userTotalSpending);
         });
 
-        // Dynamic History Log Logger
         if(historyListenerUnsubscribe) historyListenerUnsubscribe();
         historyListenerUnsubscribe = onValue(ref(database, 'orders'), (snapshot) => {
             const container = document.getElementById('history-container');
@@ -1012,7 +1068,7 @@
                         <div class="history-card">
                             <div class="hist-row"><strong>${order.package}</strong> <span class="badge-status ${statusClass}">${status}</span></div>
                             <div class="hist-row" style="color:#aaa; font-size:12px; word-break:break-all;">Link: ${order.instagram_url}</div>
-                            <div class="hist-row" style="color:#666; font-size:11px; margin-top:4px;"><span>${order.date} | ${order.time}</span> <span style="color:#d4af37;">-${order.coins_deducted} C</span></div>
+                            <div class="hist-row" style="color:#666; font-size:11px; margin-top:4px;"><span>${order.date} | ${order.time}</span> <span style="color:#d4af37;">-${formatIndianNumber(order.coins_deducted)} C</span></div>
                         </div>
                     `;
                 }
@@ -1068,7 +1124,7 @@
         }
     }
 
-    // 2-Step Deposit Selection Flow
+    // 2-Step Deposit Selection Flow Engine
     window.selectDepositPack = function(element, amountInr, creditCoins) {
         document.querySelectorAll('.deposit-card').forEach(c => c.classList.remove('selected-card'));
         element.classList.add('selected-card');
@@ -1076,28 +1132,98 @@
         pendingDepositInr = amountInr;
         pendingDepositCoins = creditCoins;
 
-        // Slide down method selector box
-        const payBox = document.getElementById('payment-box');
-        payBox.style.display = 'flex';
-        payBox.scrollIntoView({ behavior: 'smooth' });
+        // Dynamic UPI intent URI generation
+        const cleanMerchantName = encodeURIComponent(TRANSACTION_MERCHANT_NAME);
+        const upiStringUrl = `upi://pay?pa=${MERCHANT_UPI_ID}&pn=${cleanMerchantName}&am=${amountInr}&cu=INR&tn=Deposit_For_${loggedInUsername}`;
+        
+        const mobileLinkBtn = document.getElementById('mobile-upi-link');
+        // If mobile view, expose redirection node array elements
+        if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            mobileLinkBtn.href = upiStringUrl;
+            mobileLinkBtn.style.display = 'block';
+        } else {
+            mobileLinkBtn.style.display = 'none';
+        }
+
+        document.getElementById('payment-box').style.display = 'flex';
+        document.getElementById('qr-display-container').style.display = 'none';
+        document.getElementById('payment-box').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Razorpay Integration Hook point
-    window.executeRazorpaySimulation = function() {
-        if(pendingDepositInr === 0 || pendingDepositCoins === 0) return;
+    // Dynamic QR generation logic using Google Chart API architecture
+    window.triggerQRGeneration = function() {
+        document.getElementById('selected-amt-txt').innerText = "₹" + formatIndianNumber(pendingDepositInr);
+        const cleanName = encodeURIComponent(TRANSACTION_MERCHANT_NAME);
+        const rawUpiData = `upi://pay?pa=${MERCHANT_UPI_ID}&pn=${cleanName}&am=${pendingDepositInr}&cu=INR&tn=Deposit_For_${loggedInUsername}`;
         
-        if(confirm(`Routing transaction to Razorpay Gateway Secure APIs for ₹${pendingDepositInr} INR?`)) {
-            const finalCoins = userCurrentCoins + pendingDepositCoins;
-            set(ref(database, 'users/' + loggedInUsername + '/coins'), finalCoins)
-                .then(() => {
-                    showCustomPopup("Payment Completed!", `Successfully processed via Razorpay. +${pendingDepositCoins.toLocaleString()} Coins added.`);
-                    // Reset selection layouts
-                    document.querySelectorAll('.deposit-card').forEach(c => c.classList.remove('selected-card'));
-                    document.getElementById('payment-box').style.display = 'none';
-                    pendingDepositInr = 0;
-                    pendingDepositCoins = 0;
-                }).catch(err => alert("Gateway sync failure: " + err.message));
+        const qrImageApiUrl = `https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${encodeURIComponent(rawUpiData)}&choe=UTF-8`;
+        document.getElementById('dynamic-qr-img').src = qrImageApiUrl;
+
+        const qrContainer = document.getElementById('qr-display-container');
+        qrContainer.style.display = 'flex';
+        qrContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Anti-Fraud UTR Token check security validation architecture
+    window.submitTransactionRequest = function() {
+        const utrVal = document.getElementById('utr-number').value.trim();
+        if(!utrVal || utrVal.length < 8) {
+            alert("Please input a valid 12-Digit Reference UTR Number generated by payment apps!");
+            return;
         }
+
+        const dbRef = ref(database);
+        
+        // Anti-Fraud Verification Loop: Check if UTR is already processed inside global ledger
+        get(child(dbRef, `used_utr_tokens/${utrVal}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                alert("Security Fraud Alert: This Transaction UTR ID has already been submitted or processed before!");
+            } else {
+                // If unique token, lock it instantly to avoid duplicate submission exploitation
+                set(ref(database, `used_utr_tokens/${utrVal}`), {
+                    username: loggedInUsername,
+                    timestamp: Date.now()
+                }).then(() => {
+                    executeTransactionRequestSubmission(utrVal);
+                });
+            }
+        }).catch((err) => {
+            alert("Security Node Interruption: " + err.message);
+        });
+    }
+
+    function executeTransactionRequestSubmission(utrVal) {
+        const currentDateTime = new Date();
+        const txnLogDetails = {
+            username: loggedInUsername,
+            amount_inr: pendingDepositInr,
+            requested_coins: pendingDepositCoins,
+            utr_id: utrVal,
+            status: "PENDING_VERIFICATION",
+            date: currentDateTime.toLocaleDateString('en-GB'),
+            time: currentDateTime.toLocaleTimeString('en-US'),
+            timestamp: Date.now()
+        };
+
+        push(ref(database, 'deposit_requests'), txnLogDetails)
+            .then(() => {
+                return emailjs.send("service_r1nva6e", "template_6gww5fp", {
+                    package: `Deposit Request: ₹${pendingDepositInr} for ${pendingDepositCoins} Coins`,
+                    instagram_url: `UTR ID: ${utrVal}`,
+                    username: loggedInUsername,
+                    coins_deducted: pendingDepositInr,
+                    date: txnLogDetails.date,
+                    time: txnLogDetails.time
+                });
+            })
+            .then(() => {
+                showCustomPopup("Request Logged Securely!", "Admin will match your UTR within 15-30 minutes and authorize your balance.");
+                document.getElementById('utr-number').value = "";
+                document.querySelectorAll('.deposit-card').forEach(c => c.classList.remove('selected-card'));
+                document.getElementById('payment-box').style.display = 'none';
+                document.getElementById('qr-display-container').style.display = 'none';
+            })
+            .catch(err => alert("Transmission Error: " + err.message));
     }
 
     window.selectService = function(element, price) {
