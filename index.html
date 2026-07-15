@@ -33,9 +33,9 @@
             color: #e0e0e0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Top aligned for smooth scrolling */
             min-height: 100vh;
-            overflow: hidden; 
+            overflow-y: auto; /* Base body scroll enabled for mobile */
         }
 
         @keyframes shimmer {
@@ -136,13 +136,13 @@
         /*--- Mobile View Structure ---*/
         .panel-container {
             width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
             background: #121212;
             padding: 16px;
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
+            overflow-y: auto; /* Allowed container level scroll */
         }
 
         /*--- Top Fixed Nav Header ---*/
@@ -152,6 +152,7 @@
             justify-content: space-between;
             padding-bottom: 12px;
             border-bottom: 1px solid #222;
+            margin-bottom: 10px;
         }
         .left-nav {
             display: flex;
@@ -201,14 +202,12 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         .app-fragment {
             display: none;
             flex-direction: column;
             height: 100%;
-            justify-content: space-between;
         }
         .app-fragment.active-fragment {
             display: flex;
@@ -262,7 +261,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 100%;
+            min-height: calc(100vh - 32px);
             padding: 20px 0 10px 0;
         }
         .login-main-form {
@@ -375,12 +374,10 @@
             gap: 6px;
         }
 
-        /* Scrollable Area Design */
+        /* Dynamic Scrollable Container Inside Tab */
         .scrollable-services {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 10px;
-            padding-right: 2px;
+            overflow-y: visible; /* Keeps natural document scroll */
+            margin-bottom: 15px;
         }
         .services-container {
             display: flex;
@@ -452,9 +449,7 @@
             border: 1px solid #222;
             border-radius: 14px;
             padding: 18px;
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         .fragment-content-body h2 {
             font-size: 18px;
@@ -662,6 +657,8 @@
             font-size: 16px;
             text-transform: uppercase;
             font-weight: bold;
+            margin-top: auto;
+            margin-bottom: 10px;
         }
 
         /* Popup Notification */
@@ -775,7 +772,7 @@
         <div class="login-main-form">
             <div class="login-header">
                 <h2 class="shimmer-text">CHIEF USER LOGIN</h2>
-                <p style="color: #666; font-size: 14px;">Enter your App Username & Password to login</p>
+                <p style="color: #666; font-size: 14px;">Enter your App Name/Username to login</p>
             </div>
             <div class="error-msg" id="login-error">Error!</div>
             <div class="input-group">
@@ -791,7 +788,7 @@
         
         <!-- Clean Integrated Casual App Footer Structure -->
         <div class="professional-login-footer">
-            <p>If you don't have an account, please download the app</p>
+            <p>New to the framework system?</p>
             <a href="https://mrchiefx12-wq.github.io/Chief-Hub/?" target="_blank" class="footer-download-link">
                 <i class="fab fa-android"></i> Download Official App
             </a>
@@ -842,9 +839,6 @@
                             <div class="price-row" onclick="selectService(this, 10000)">
                                 <span class="coins">10,000</span><span>1K follower</span>
                             </div>
-                            <div class="price-row" onclick="selectService(this, 100000)">
-                                <span class="coins">1,00,000</span><span>10K follower</span>
-                            </div>
                         </div>
                     </div>
 
@@ -861,9 +855,6 @@
                             <div class="price-row" onclick="selectService(this, 10000)">
                                 <span class="coins">10,000</span><span>1K Like</span>
                             </div>
-                            <div class="price-row" onclick="selectService(this, 100000)">
-                                <span class="coins">1,00,000</span><span>10K Like</span>
-                            </div>
                         </div>
                     </div>
 
@@ -875,13 +866,10 @@
                         </div>
                         <div class="service-content">
                             <div class="price-row" onclick="selectService(this, 1000)">
-                                <span class="coins">1,000</span><span>10k View</span>
+                                <span class="coins">1,000</span><span>10k VIEW</span>
                             </div>
                             <div class="price-row" onclick="selectService(this, 10000)">
-                                <span class="coins">10,000</span><span>100k View</span>
-                            </div>
-                            <div class="price-row" onclick="selectService(this, 100000)">
-                                <span class="coins">1,00,000</span><span>1M View</span>
+                                <span class="coins">10,000</span><span>100k VIEW</span>
                             </div>
                         </div>
                     </div>
@@ -896,9 +884,6 @@
                             <div class="price-row" onclick="selectService(this, 1000)">
                                 <span class="coins">1,000</span><span>100 Comment</span>
                             </div>
-                            <div class="price-row" onclick="selectService(this, 1000)">
-                                <span class="coins">1,0000</span><span>1000 Comment</span>
-                            </div>
                         </div>
                     </div>
 
@@ -910,13 +895,10 @@
                         </div>
                         <div class="service-content">
                             <div class="price-row" onclick="selectService(this, 1000)">
-                                <span class="coins">1,000</span><span>10k View</span>
+                                <span class="coins">1,000</span><span>10k VIEW</span>
                             </div>
                             <div class="price-row" onclick="selectService(this, 10000)">
-                                <span class="coins">10,000</span><span>100k View</span>
-                            </div>
-                            <div class="price-row" onclick="selectService(this, 100000)">
-                                <span class="coins">1,00,000</span><span>1M View</span>
+                                <span class="coins">10,000</span><span>100k VIEW</span>
                             </div>
                         </div>
                     </div>
@@ -1070,6 +1052,9 @@
         document.querySelectorAll('.app-fragment').forEach(frag => frag.classList.remove('active-fragment'));
         const targetFrag = document.getElementById('fragment-' + targetName);
         if(targetFrag) targetFrag.classList.add('active-fragment');
+        
+        // Scroll to top automatically when switching fragments
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     onAuthStateChanged(auth, (user) => {
@@ -1188,7 +1173,7 @@
         }
     }
 
-    /* FIXED POPUP DISPLAY & INTENT CONFIGURATION */
+    /* POPUP DISPLAY & INTENT CONFIGURATION */
     window.openDepositModal = function(amountInr, creditCoins, packageName) {
         pendingDepositInr = amountInr;
         pendingDepositCoins = creditCoins;
@@ -1203,7 +1188,7 @@
         const intentBtn = document.getElementById('modal-mobile-intent');
         intentBtn.href = upiStringUrl;
 
-        // Force Modal display status override to show up smoothly
+        // Display modal
         document.getElementById('deposit-modal').style.display = 'flex';
     }
 
